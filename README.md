@@ -87,7 +87,10 @@ User → FastAPI → Orchestrator Agent
 | `GET` | `/modules` | Lists all discovered modules and their summaries. |
 
 ## 📺 Demo
-> **Demo video coming soon**
+
+**Live Demo:** https://codecompass-237057729662.us-central1.run.app
+
+**GitHub:** https://github.com/Akshu2811/CodeCompass
 
 ![Main UI Placeholder](https://via.placeholder.com/800x450?text=CodeCompass+Dashboard+Mockup)
 
