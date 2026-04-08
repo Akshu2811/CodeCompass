@@ -93,4 +93,4 @@ User → FastAPI → Orchestrator Agent
 
 ---
 **Built for:** Google Gen AI Academy APAC Hackathon 2026  
-**Author:** [Akshi (Akshu2811)](https://github.com/Akshu2811)
+**Author:** [Akshitha Ganji(Akshu2811)](https://github.com/Akshu2811)
