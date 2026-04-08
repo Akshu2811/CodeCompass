@@ -92,8 +92,6 @@ User → FastAPI → Orchestrator Agent
 
 **GitHub:** https://github.com/Akshu2811/CodeCompass
 
-![Main UI Placeholder](https://via.placeholder.com/800x450?text=CodeCompass+Dashboard+Mockup)
-
 ---
 **Built for:** Google Gen AI Academy APAC Hackathon 2026  
 **Author:** [Akshitha Ganji(Akshu2811)](https://github.com/Akshu2811)
