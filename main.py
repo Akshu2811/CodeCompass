@@ -1,22 +1,18 @@
 import os
+import vertexai
+vertexai.init(
+    project=os.getenv("GOOGLE_CLOUD_PROJECT", "code-compass-agent"),
+    location=os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
+)
 import re
 # trigger reload
 from fastapi import FastAPI, BackgroundTasks, APIRouter, HTTPException
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from db.database import init_db, get_job_status, get_all_modules, get_connection
-from agents.repo_reader import ingest_repository
-from agents.qa_agent import answer_question
-from agents.guide_agent import generate_onboarding_guide
 
 load_dotenv(override=True)
 
-import vertexai
-vertexai.init(
-    project=os.getenv("GOOGLE_CLOUD_PROJECT"),
-    location=os.getenv("GOOGLE_CLOUD_LOCATION")
-)
 
 app = FastAPI(title="CodeCompass Central API")
 

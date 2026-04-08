@@ -1,3 +1,9 @@
+import os
+import vertexai
+vertexai.init(
+    project=os.getenv("GOOGLE_CLOUD_PROJECT", "code-compass-agent"),
+    location=os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
+)
 import time
 from tools.github_tool import fetch_repo_tree, fetch_file_content
 from agents.code_mapper import map_code

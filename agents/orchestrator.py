@@ -1,3 +1,9 @@
+import os
+import vertexai
+vertexai.init(
+    project=os.getenv("GOOGLE_CLOUD_PROJECT", "code-compass-agent"),
+    location=os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
+)
 from google.adk.agents import Agent
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
