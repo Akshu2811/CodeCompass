@@ -88,6 +88,8 @@ User → FastAPI → Orchestrator Agent
 
 ## 📺 Demo
 
+**Demo Video:** https://youtu.be/jfWJexESuS4
+
 **Live Demo:** https://codecompass-237057729662.us-central1.run.app
 
 **GitHub:** https://github.com/Akshu2811/CodeCompass
