@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+google-adk
+google-cloud-aiplatform
+vertexai
+requests
+numpy
+python-dotenv

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCompass — AI Onboarding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>window.lastGuideMarkdown = "";</script>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-color: #161b22;
+            --text-color: #c9d1d9;
+            --accent-brand: #58a6ff;
+            --accent-hover: #3182ce;
+            --border-color: #30363d;
+            --success-color: #238636;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #58a6ff, #a371f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #8b949e;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background-color: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border-color: #58a6ff;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-brand);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+
+        button {
+            padding: 1rem 2rem;
+            background-color: var(--accent-brand);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            width: 100%;
+        }
+
+        .btn-success:hover {
+            background-color: #2ea043;
+        }
+
+        .output-box {
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            min-height: 200px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: transparent;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #1f2937;
+            color: #c9d1d9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #1f2937;
+            color: #9ca3af;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .disabled-ui {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .response-content h1,
+        .response-content h2,
+        .response-content h3 {
+            margin: 6px 0 3px 0;
+            line-height: 1.3
+        }
+
+        .response-content p {
+            margin: 3px 0;
+            line-height: 1.5
+        }
+
+        .response-content ul,
+        .response-content ol {
+            margin: 2px 0;
+            padding-left: 18px
+        }
+
+        .response-content ul ul,
+        .response-content ol ol {
+            margin: 0;
+            padding-left: 16px
+        }
+
+        .response-content li {
+            margin: 1px 0;
+            line-height: 1.4
+        }
+
+        .response-content table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px
+        }
+
+        .response-content td,
+        .response-content th {
+            padding: 3px 6px;
+            border: 1px solid #444
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CodeCompass</h1>
+            <p>Paste a GitHub URL to map out, summarize, and instantly query entire codebases.</p>
+        </div>
+
+        <div class="card" id="ingestCard">
+            <h2 style="margin-top: 0;">1. Ingest Repository</h2>
+            <div class="input-group">
+                <input type="text" id="repoUrl" placeholder="e.g. https://github.com/owner/repo" />
+                <button onclick="startIngestion()">Analyze</button>
+            </div>
+            <div id="statusBadge" class="status-badge" style="display: none;"></div>
+        </div>
+
+        <div class="card disabled-ui" id="chatCard">
+            <h2 style="margin-top: 0;">2. Explore & Ask</h2>
+            <button class="btn-success" onclick="fetchGuide()" style="margin-bottom: 2rem;">🗺️ Generate Structured
+                Onboarding Guide</button>
+
+            <div class="input-group">
+                <input type="text" id="queryInput" placeholder="Ask details about how files work together..." />
+                <button onclick="askAgent()">Send</button>
+            </div>
+
+            <div class="output-box response-content" id="agentOutput">
+                Output from the AI will appear here...
+            </div>
+            
+            <button id="pdfBtn" class="btn-success" onclick="downloadPdf()" style="display: none; margin-top: 1rem;">Download Onboarding Guide as PDF</button>
+        </div>
+    </div>
+
+    <script>
+        let currentActiveRepo = "";
+        let pollingTimer;
+
+        async function startIngestion() {
+            const urlInput = document.getElementById("repoUrl").value.trim();
+            if (!urlInput) return;
+            currentActiveRepo = urlInput;
+
+            const badge = document.getElementById("statusBadge");
+            badge.style.display = "inline-block";
+            badge.innerHTML = `<div class="spinner"></div> Initiating Ingestion...`;
+            badge.style.color = "#fbbf24";
+
+            try {
+                const res = await fetch("/ingest", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ repo_url: currentActiveRepo })
+                });
+                const data = await res.json();
+
+                if (data.status === "ingestion_started" || data.status === "in_progress") {
+                    pollingTimer = setInterval(pollStatus, 3000);
+                } else if (data.status === "completed") {
+                    badge.innerHTML = "✅ Ingestion Complete";
+                    badge.style.color = "#34d399";
+                    unlockChat();
+                }
+            } catch (err) {
+                badge.innerText = "Error: Failed to connect.";
+                badge.style.color = "#f87171";
+            }
+        }
+
+        async function pollStatus() {
+            const res = await fetch(`/status?repo_url=${encodeURIComponent(currentActiveRepo)}`);
+            const data = await res.json();
+            const badge = document.getElementById("statusBadge");
+
+            if (data.status === "completed") {
+                clearInterval(pollingTimer);
+                badge.innerHTML = "✅ Ingestion Complete";
+                badge.style.color = "#34d399";
+                unlockChat();
+            } else if (data.status === "failed") {
+                clearInterval(pollingTimer);
+                badge.innerHTML = "❌ Ingestion Failed";
+                badge.style.color = "#f87171";
+            } else {
+                badge.innerHTML = `<div class="spinner"></div> Ingesting files in background...`;
+            }
+        }
+
+        function unlockChat() {
+            const chatCard = document.getElementById("chatCard");
+            chatCard.classList.remove("disabled-ui");
+        }
+
+        async function askAgent() {
+            const query = document.getElementById("queryInput").value;
+            const output = document.getElementById("agentOutput");
+            const pdfBtn = document.getElementById("pdfBtn");
+            if (!query || !currentActiveRepo) return;
+
+            output.innerHTML = `<div class="spinner"></div> Analyzing codebase vectors...`;
+            pdfBtn.style.display = "none";
+
+            const res = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ repo_url: currentActiveRepo, question: query })
+            });
+            const data = await res.json();
+            
+            const copyBtnHtml = `<button id="copyBtn" class="copy-btn" onclick="copyAnswer()">📋 Copy</button>`;
+            output.innerHTML = copyBtnHtml + marked.parse(data.answer);
+        }
+
+        async function fetchGuide() {
+            const output = document.getElementById("agentOutput");
+            const pdfBtn = document.getElementById("pdfBtn");
+            if (!currentActiveRepo) return;
+
+            output.innerHTML = `<div class="spinner"></div> Generating curriculum...`;
+            pdfBtn.style.display = "none";
+
+            const res = await fetch(`/guide?repo_url=${encodeURIComponent(currentActiveRepo)}`);
+            const data = await res.json();
+            window.lastGuideMarkdown = data.guide;
+            output.innerHTML = marked.parse(data.guide);
+            pdfBtn.style.display = "block";
+        }
+
+        async function copyAnswer() {
+            const output = document.getElementById("agentOutput");
+            const clone = output.cloneNode(true);
+            const btn = clone.querySelector('.copy-btn');
+            if (btn) btn.remove();
+            
+            await navigator.clipboard.writeText(clone.innerText.trim());
+            
+            const copyBtn = document.getElementById("copyBtn");
+            copyBtn.innerHTML = "✅ Copied!";
+            setTimeout(() => {
+                copyBtn.innerHTML = "📋 Copy";
+            }, 2000);
+        }
+
+        async function downloadPdf() {
+            const pdfBtn = document.getElementById("pdfBtn");
+            const originalText = pdfBtn.innerText;
+            pdfBtn.innerText = "Generating PDF...";
+            pdfBtn.disabled = true;
+
+            setTimeout(() => {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const margin = 15;
+                    const contentWidth = pageWidth - (margin * 2);
+                    let y = margin + 15;
+
+                    const addHeader = () => {
+                        if (pdf.internal.getCurrentPageInfo().pageNumber === 1) {
+                            pdf.setFont("helvetica", "bold");
+                            pdf.setFontSize(16);
+                            pdf.setTextColor(26, 115, 232);
+                            pdf.text("CodeCompass — Onboarding Guide", margin, margin);
+                            pdf.setDrawColor(26, 115, 232);
+                            pdf.setLineWidth(0.5);
+                            pdf.line(margin, margin + 3, pageWidth - margin, margin + 3);
+                        }
+                    };
+
+                    const addFooter = () => {
+                        const totalPages = pdf.internal.getNumberOfPages();
+                        for (let i = 1; i <= totalPages; i++) {
+                            pdf.setPage(i);
+                            pdf.setFont("helvetica", "normal");
+                            pdf.setFontSize(8);
+                            pdf.setTextColor(150, 150, 150);
+                            const footerStr = `Page ${i} of ${totalPages}`;
+                            pdf.text(footerStr, (pageWidth - pdf.getTextWidth(footerStr)) / 2, 287);
+                        }
+                    };
+
+                    addHeader();
+
+                    const checkPageBreak = (neededSpace) => {
+                        if (y + neededSpace > 270) {
+                            pdf.addPage();
+                            const pNum = pdf.internal.getCurrentPageInfo().pageNumber;
+                            addHeader();
+                            y = (pNum === 1) ? (margin + 15) : 15;
+                            return true;
+                        }
+                        return false;
+                    };
+
+                    let rawText = window.lastGuideMarkdown || "";
+                    let lines = rawText.split('\n');
+                    
+                    // Bug 3: Strip AI Preamble
+                    const firstContentIndex = lines.findIndex(l => /^(#|\d+\.|Onboarding)/.test(l.trim()));
+                    if (firstContentIndex !== -1) {
+                        lines = lines.slice(firstContentIndex);
+                    }
+
+                    for (let i = 0; i < lines.length; i++) {
+                        let line = lines[i];
+                        const trimmed = line.trim();
+
+                        if (!trimmed) {
+                            y += 4;
+                            continue;
+                        }
+
+                        // 3. Tables
+                        if (trimmed.startsWith('|')) {
+                            const tableLines = [];
+                            while (i < lines.length && lines[i].trim().startsWith('|')) {
+                                tableLines.push(lines[i].trim());
+                                i++;
+                            }
+                            i--; 
+
+                            if (tableLines.length >= 3) {
+                                y += 5;
+                                const headers = tableLines[0].split('|').filter(s => s.trim().length > 0).map(s => s.trim());
+                                const colWidths = [45, 60, 75];
+                                const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+                                const tableX = margin;
+
+                                checkPageBreak(12);
+                                pdf.setFillColor(26, 115, 232);
+                                pdf.rect(tableX, y, tableWidth, 9, 'F');
+                                pdf.setFont("helvetica", "bold");
+                                pdf.setFontSize(9);
+                                pdf.setTextColor(255, 255, 255);
+                                pdf.setDrawColor(204, 204, 204);
+
+                                let curX = tableX;
+                                headers.forEach((h, idx) => {
+                                    pdf.rect(curX, y, colWidths[idx], 9, 'S');
+                                    pdf.text(h, curX + 2, y + 6);
+                                    curX += colWidths[idx];
+                                });
+                                y += 9;
+
+                                for (let r = 2; r < tableLines.length; r++) {
+                                    const rowData = tableLines[r].split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length - 1).map(s => s.trim());
+                                    const isCategory = rowData.length === 1 || (rowData.length === 3 && !rowData[1] && !rowData[2]);
+                                    
+                                    const cellLines = rowData.map((val, idx) => {
+                                        const cleanVal = val.replace(/\*\*/g, '').replace(/`/g, '');
+                                        return pdf.splitTextToSize(cleanVal, colWidths[idx] - 4);
+                                    });
+                                    
+                                    const maxLines = isCategory ? 1 : Math.max(...cellLines.map(l => l.length));
+                                    const rowHeight = (maxLines * 4.5) + 3;
+
+                                    checkPageBreak(rowHeight);
+                                    
+                                    if (isCategory) {
+                                        pdf.setFillColor(232, 240, 254);
+                                        pdf.rect(tableX, y, tableWidth, rowHeight, 'F');
+                                        pdf.setDrawColor(204, 204, 204);
+                                        pdf.rect(tableX, y, tableWidth, rowHeight, 'S');
+                                        pdf.setFont("helvetica", "bold");
+                                        pdf.setFontSize(9);
+                                        pdf.setTextColor(26, 26, 26);
+                                        pdf.text(rowData[0].replace(/\*\*/g, ''), tableX + 2, y + 5.5);
+                                    } else {
+                                        if (r % 2 === 1) pdf.setFillColor(240, 244, 255);
+                                        else pdf.setFillColor(255, 255, 255);
+                                        pdf.rect(tableX, y, tableWidth, rowHeight, 'F');
+                                        pdf.setFont("helvetica", "normal");
+                                        pdf.setFontSize(8);
+                                        pdf.setTextColor(33, 33, 33);
+                                        let cellX = tableX;
+                                        cellLines.forEach((linesArr, idx) => {
+                                            pdf.setDrawColor(204, 204, 204);
+                                            pdf.rect(cellX, y, colWidths[idx], rowHeight, 'S');
+                                            linesArr.forEach((txt, lIdx) => {
+                                                pdf.text(txt, cellX + 2, y + 5 + (lIdx * 4.5));
+                                            });
+                                            cellX += colWidths[idx];
+                                        });
+                                    }
+                                    y += rowHeight;
+                                }
+                                y += 5;
+                                continue;
+                            }
+                        }
+
+                        // Bug 1 & 2: Content Styling and Global Wrapping
+                        let cleanLine = line.replace(/#+\s*/, "").replace(/\*\*/g, "").replace(/`/g, "");
+                        
+                        let fontSize = 10;
+                        let fontStyle = "normal";
+                        let textColor = [68, 68, 68]; // Gray #444444
+                        let xOffset = margin;
+                        let lineSpacing = 6;
+                        let isBullet = false;
+
+                        if (/^\d+\.\s+[A-Z]/.test(trimmed)) {
+                            fontSize = 12;
+                            fontStyle = "bold";
+                            textColor = [26, 26, 26]; // #1a1a1a
+                        } else if (/^Step \d+/.test(trimmed)) {
+                            fontSize = 11;
+                            fontStyle = "bold";
+                            textColor = [51, 51, 51]; // #333333
+                        } else if (/^[\*•-]\s+/.test(trimmed)) {
+                            xOffset = margin + 8;
+                            cleanLine = cleanLine.replace(/^[\*•-]\s+/, "");
+                            isBullet = true;
+                        }
+
+                        pdf.setFont("helvetica", fontStyle);
+                        pdf.setFontSize(fontSize);
+                        pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
+
+                        const wrappedLines = pdf.splitTextToSize(cleanLine, contentWidth - (xOffset - margin));
+                        for (let j = 0; j < wrappedLines.length; j++) {
+                            checkPageBreak(lineSpacing);
+                            if (j === 0 && isBullet) {
+                                pdf.text("•", margin + 4, y);
+                            }
+                            pdf.text(wrappedLines[j], xOffset, y);
+                            y += lineSpacing;
+                        }
+                    }
+
+                    addFooter();
+                    const repoName = currentActiveRepo
+                        .split('/').pop()
+                        .replace(/[^a-zA-Z0-9]/g, '_');
+                    pdf.save(`${repoName}_Onboarding_Guide.pdf`);
+                } catch (err) {
+                    console.error(err);
+                    alert("PDF Generation Failed: " + err.message);
+                } finally {
+                    pdfBtn.innerText = originalText;
+                    pdfBtn.disabled = false;
+                }
+            }, 50);
+        }
+
+    </script>
+</body>
+
+</html>
