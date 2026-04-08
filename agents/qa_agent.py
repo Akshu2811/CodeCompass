@@ -10,7 +10,9 @@ import uuid
 qa_agent = Agent(
     name="QAAgent",
     model="gemini-2.5-pro",
-    instruction="You answer questions about the codebase based only on the retrieved context."
+    instruction="""You answer questions about the codebase based only on the retrieved context. 
+If the provided context does not contain enough information to answer the question confidently, respond with: 'I don't have enough information in this codebase to answer that. Try asking about specific files, functions, or modules you can see in the repository.' 
+Do not make up or hallucinate answers."""
 )
 
 async def get_agent_response(runner, prompt, session_id):
@@ -36,10 +38,12 @@ async def get_agent_response(runner, prompt, session_id):
 async def answer_question(repo_url: str, question: str) -> str:
     try:
         results = search_related_modules(repo_url, question, top_k=3)
-        context = "\n".join([f"--- PATH: {r[1]} ---\n{r[2]}" for r in results])
         
-        if not context:
-            return "I could not find relevant code to answer the question."
+        # Check if results are insufficient
+        if not results or all(r[0] < 0.3 for r in results):
+            return "I couldn't find specific information about this in the ingested codebase. This topic may not be covered in the repository files, or try rephrasing your question using terms that might appear in the code (e.g. file names, function names, module names)."
+
+        context = "\n".join([f"--- PATH: {r[1]} ---\n{r[2]}" for r in results])
             
         prompt = f"User Question: {question}\n\nContext:\n{context}\n\nPlease formulate an answer."
         runner = Runner(agent=qa_agent, app_name="CodeCompass", session_service=InMemorySessionService())

@@ -1,4 +1,5 @@
 import os
+import re
 # trigger reload
 from fastapi import FastAPI, BackgroundTasks, APIRouter, HTTPException
 from fastapi.staticfiles import StaticFiles
@@ -33,9 +34,16 @@ class AskRequest(BaseModel):
 
 @router.post("/ingest")
 async def ingest_codebase(request: IngestRequest, background_tasks: BackgroundTasks):
+    github_pattern = re.compile(
+        r'^https://github\.com/[\w.-]+/[\w.-]+/?$'
+    )
+    if not github_pattern.match(request.repo_url):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid URL. Only GitHub repository URLs are accepted. Format: https://github.com/owner/repo"
+        )
+
     URL = request.repo_url
-    if not URL.startswith("https://github.com/"):
-        raise HTTPException(status_code=400, detail="Invalid GitHub URL.")
 
     status = get_job_status(URL)
     if status in ["in_progress", "completed"]:

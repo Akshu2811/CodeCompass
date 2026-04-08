@@ -272,9 +272,18 @@
         async function startIngestion() {
             const urlInput = document.getElementById("repoUrl").value.trim();
             if (!urlInput) return;
-            currentActiveRepo = urlInput;
 
             const badge = document.getElementById("statusBadge");
+
+            const githubPattern = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/;
+            if (!githubPattern.test(urlInput)) {
+                badge.style.display = "inline-block";
+                badge.innerHTML = "Invalid URL. Please enter a valid GitHub repository URL like https://github.com/owner/repo";
+                badge.style.color = "#f87171";
+                return;
+            }
+
+            currentActiveRepo = urlInput;
             badge.style.display = "inline-block";
             badge.innerHTML = `<div class="spinner"></div> Initiating Ingestion...`;
             badge.style.color = "#fbbf24";
@@ -293,9 +302,12 @@
                     badge.innerHTML = "✅ Ingestion Complete";
                     badge.style.color = "#34d399";
                     unlockChat();
+                } else if (res.status === 400) {
+                    badge.innerText = data.detail || "Invalid Request";
+                    badge.style.color = "#f87171";
                 }
             } catch (err) {
-                badge.innerText = "Error: Failed to connect.";
+                badge.innerText = "Error: Failed to connect to server.";
                 badge.style.color = "#f87171";
             }
         }
@@ -342,6 +354,12 @@
             
             const copyBtnHtml = `<button id="copyBtn" class="copy-btn" onclick="copyAnswer()">📋 Copy</button>`;
             output.innerHTML = copyBtnHtml + marked.parse(data.answer);
+
+            if (data.answer.includes("couldn't find") || data.answer.includes("don't have enough")) {
+                output.style.borderLeft = '4px solid #fbbf24';
+            } else {
+                output.style.borderLeft = 'none';
+            }
         }
 
         async function fetchGuide() {
