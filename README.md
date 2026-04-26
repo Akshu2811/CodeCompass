@@ -1,4 +1,4 @@
-# CodeCompass 🧭
+# CodeCompass 
 > AI-powered codebase onboarding agent that helps developers understand any GitHub repository instantly.
 
 ![Python 3.13](https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge&logo=python)
@@ -8,14 +8,14 @@
 ![Cloud Run](https://img.shields.io/badge/Deployment-Cloud%20Run-4285F4?style=for-the-badge&logo=google-cloud)
 ![License MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-## 🌟 Overview
+##  Overview
  onboarding new developers to a complex codebase can take weeks of reading documentation and manually untangling file dependencies. **CodeCompass** solves this by instantly analyzing any GitHub repository and providing a structured, interactive guidance system.
 
 - **Instant Mapping**: Understand module hierarchies and file relationships in seconds.
 - **Natural Language Interaction**: Ask complex questions about the architecture and get accurate, context-aware answers.
 - **Guided Onboarding**: Generate step-by-step curriculum for new engineers to master the repository.
 
-## 🚀 Features
+##  Features
 - **Repo Ingestion**: Direct ingestion via GitHub API.
 - **AI Module Summarisation**: High-speed file analysis using **Gemini 2.5 Flash**.
 - **Semantic Search**: Powered by **text-embedding-004** vectors for sub-second context retrieval.
@@ -25,7 +25,7 @@
 - **Smart Clipboard**: One-click copy for answers and code snippets.
 - **Robust Validation**: Enforced GitHub URL patterns for secure ingestion.
 
-## 🏗 Architecture
+## Architecture
 ```text
 User → FastAPI → Orchestrator Agent
           ↓
@@ -34,7 +34,7 @@ User → FastAPI → Orchestrator Agent
    SQLite Knowledge Store (Embeddings & Summaries)
 ```
 
-## 🛠 Tech Stack
+## Tech Stack
 | Component | Technology |
 | :--- | :--- |
 | **Agent Framework** | Google ADK |
@@ -46,7 +46,7 @@ User → FastAPI → Orchestrator Agent
 | **Deployment** | Google Cloud Run |
 | **IDE** | VS Code / Cursor |
 
-## 🏁 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Python 3.13+
@@ -77,7 +77,7 @@ User → FastAPI → Orchestrator Agent
    uvicorn main:app --reload --port 8000
    ```
 
-## 📡 API Endpoints
+## API Endpoints
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `POST` | `/ingest` | Triggers background repository analysis. |
@@ -86,13 +86,11 @@ User → FastAPI → Orchestrator Agent
 | `GET` | `/guide` | Fetches/Generates a persistent onboarding path. |
 | `GET` | `/modules` | Lists all discovered modules and their summaries. |
 
-## 📺 Demo
+## Demo
 
 **Demo Video:** https://youtu.be/jfWJexESuS4
 
 **Live Demo:** https://codecompass-237057729662.us-central1.run.app
-
-**GitHub:** https://github.com/Akshu2811/CodeCompass
 
 ---
 **Built for:** Google Gen AI Academy APAC Hackathon 2026  
