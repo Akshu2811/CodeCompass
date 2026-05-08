@@ -15,7 +15,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS ingest_jobs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             repo_url TEXT UNIQUE,
-            status TEXT
+            status TEXT,
+            progress INTEGER DEFAULT 0
         );
         CREATE TABLE IF NOT EXISTS modules (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,11 +41,27 @@ def init_db():
         );
     ''')
     conn.commit()
+    # Migrate existing DBs that predate the progress column
+    try:
+        conn.execute("ALTER TABLE ingest_jobs ADD COLUMN progress INTEGER DEFAULT 0")
+        conn.commit()
+    except sqlite3.OperationalError:
+        pass  # Column already exists
     conn.close()
 
 def set_job_status(repo_url, status):
     conn = get_connection()
-    conn.execute("INSERT OR REPLACE INTO ingest_jobs (repo_url, status) VALUES (?, ?)", (repo_url, status))
+    conn.execute(
+        """INSERT INTO ingest_jobs (repo_url, status, progress) VALUES (?, ?, 0)
+           ON CONFLICT(repo_url) DO UPDATE SET status=excluded.status""",
+        (repo_url, status),
+    )
+    conn.commit()
+    conn.close()
+
+def set_job_progress(repo_url, progress: int):
+    conn = get_connection()
+    conn.execute("UPDATE ingest_jobs SET progress = ? WHERE repo_url = ?", (progress, repo_url))
     conn.commit()
     conn.close()
 
@@ -53,6 +70,12 @@ def get_job_status(repo_url):
     row = conn.execute("SELECT status FROM ingest_jobs WHERE repo_url = ?", (repo_url,)).fetchone()
     conn.close()
     return row['status'] if row else "not_found"
+
+def get_job_progress(repo_url) -> int:
+    conn = get_connection()
+    row = conn.execute("SELECT progress FROM ingest_jobs WHERE repo_url = ?", (repo_url,)).fetchone()
+    conn.close()
+    return row['progress'] if row else 0
 
 def save_module(repo_url, path, content, summary, vector_blob):
     conn = get_connection()

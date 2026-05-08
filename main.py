@@ -7,10 +7,11 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-from db.database import init_db, get_connection, get_job_status, get_all_modules
+from db.database import init_db, get_connection, get_job_status, get_job_progress, get_all_modules
 from agents.repo_reader import ingest_repository
 from agents.qa_agent import answer_question
 from agents.guide_agent import generate_onboarding_guide
+from agents.review_agent import review_code, fetch_and_review_pr
 
 load_dotenv(override=True)
 
@@ -32,6 +33,13 @@ class IngestRequest(BaseModel):
 class AskRequest(BaseModel):
     repo_url: str
     question: str
+
+class ReviewRequest(BaseModel):
+    code: str
+    language: str = ""
+
+class PRReviewRequest(BaseModel):
+    pr_url: str
 
 @router.post("/ingest")
 async def ingest_codebase(request: IngestRequest, background_tasks: BackgroundTasks):
@@ -56,8 +64,7 @@ async def ingest_codebase(request: IngestRequest, background_tasks: BackgroundTa
 
 @router.get("/status")
 async def check_ingestion_status(repo_url: str):
-    # Used for polling long workflows
-    return {"status": get_job_status(repo_url), "repo": repo_url}
+    return {"status": get_job_status(repo_url), "repo": repo_url, "progress": get_job_progress(repo_url)}
 
 @router.post("/ask")
 async def ask_codebase(request: AskRequest):
@@ -78,6 +85,28 @@ async def generate_guide(repo_url: str):
     # Create new guide using Pro Agent
     guide = await generate_onboarding_guide(repo_url)
     return {"guide": guide}
+
+@router.post("/review")
+async def review_codebase(request: ReviewRequest):
+    if not request.code or len(request.code) < 10:
+        raise HTTPException(status_code=400, detail="Code is too short to review.")
+    if len(request.code) > 50000:
+        raise HTTPException(status_code=400, detail="Code too large. Max 50,000 characters.")
+    result = await review_code(request.code, request.language)
+    return result
+
+@router.post("/review-pr")
+async def review_pull_request(request: PRReviewRequest):
+    pr_pattern = re.compile(
+        r'^https://github\.com/[\w.-]+/[\w.-]+/pull/\d+/?$'
+    )
+    if not pr_pattern.match(request.pr_url):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid PR URL. Expected: https://github.com/owner/repo/pull/number"
+        )
+    result = await fetch_and_review_pr(request.pr_url)
+    return result
 
 @router.get("/modules")
 async def list_modules(repo_url: str):

@@ -113,6 +113,11 @@
             transform: scale(0.98);
         }
 
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .btn-success {
             background-color: var(--success-color);
             width: 100%;
@@ -178,9 +183,7 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         .disabled-ui {
@@ -228,6 +231,202 @@
             padding: 3px 6px;
             border: 1px solid #444
         }
+
+        /* ── Tabs ── */
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: #8b949e;
+            border: none;
+            border-bottom: 2px solid transparent;
+            border-radius: 0;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+            margin-bottom: -1px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-color);
+            background: transparent;
+            transform: none;
+        }
+
+        .tab-btn:active {
+            transform: none;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-brand);
+            border-bottom-color: var(--accent-brand);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ── Review card ── */
+        select {
+            padding: 0.8rem 1rem;
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent-brand);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+
+        textarea.code-input {
+            display: block;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-color);
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.875rem;
+            resize: vertical;
+            box-sizing: border-box;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        textarea.code-input:focus {
+            outline: none;
+            border-color: var(--accent-brand);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+
+        .score-hero {
+            text-align: center;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            background: #0d1117;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .review-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .category-row {
+            margin-bottom: 1rem;
+        }
+
+        .category-label-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        .bar-track {
+            height: 8px;
+            background: #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .issue-card {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid;
+        }
+
+        .issue-card.critical   { border-left-color: #f87171; }
+        .issue-card.warning    { border-left-color: #fbbf24; }
+        .issue-card.suggestion { border-left-color: #58a6ff; }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .severity-badge.critical   { background: rgba(248,113,113,0.15); color: #f87171; }
+        .severity-badge.warning    { background: rgba(251,191,36,0.15);  color: #fbbf24; }
+        .severity-badge.suggestion { background: rgba(88,166,255,0.15);  color: #58a6ff; }
+
+        .issue-description {
+            margin: 0.5rem 0 0.25rem;
+            font-size: 0.875rem;
+            color: #8b949e;
+            line-height: 1.5;
+        }
+
+        .issue-fix {
+            font-size: 0.875rem;
+            color: #58a6ff;
+            line-height: 1.5;
+        }
+
+        .positive-item {
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+            color: #8b949e;
+            border-bottom: 1px solid #21262d;
+            line-height: 1.5;
+        }
+
+        .positive-item:last-child {
+            border-bottom: none;
+        }
+
+        .pr-divider {
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.85rem;
+            margin: 1.25rem 0;
+            position: relative;
+        }
+
+        .pr-divider::before,
+        .pr-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 38%;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .pr-divider::before { left: 0; }
+        .pr-divider::after  { right: 0; }
     </style>
 </head>
 
@@ -238,36 +437,88 @@
             <p>Paste a GitHub URL to map out, summarize, and instantly query entire codebases.</p>
         </div>
 
-        <div class="card" id="ingestCard">
-            <h2 style="margin-top: 0;">1. Ingest Repository</h2>
-            <div class="input-group">
-                <input type="text" id="repoUrl" placeholder="e.g. https://github.com/owner/repo" />
-                <button onclick="startIngestion()">Analyze</button>
-            </div>
-            <div id="statusBadge" class="status-badge" style="display: none;"></div>
+        <div class="tab-nav">
+            <button class="tab-btn active" id="tabBtn-ingest" onclick="showTab('ingest')">📥 Ingest Repository</button>
+            <button class="tab-btn" id="tabBtn-explore" onclick="showTab('explore')">🔍 Explore &amp; Ask</button>
+            <button class="tab-btn" id="tabBtn-review" onclick="showTab('review')">⚡ Review Code</button>
         </div>
 
-        <div class="card disabled-ui" id="chatCard">
-            <h2 style="margin-top: 0;">2. Explore & Ask</h2>
-            <button class="btn-success" onclick="fetchGuide()" style="margin-bottom: 2rem;">🗺️ Generate Structured
-                Onboarding Guide</button>
-
-            <div class="input-group">
-                <input type="text" id="queryInput" placeholder="Ask details about how files work together..." />
-                <button onclick="askAgent()">Send</button>
+        <div class="tab-panel active" id="panel-ingest">
+            <div class="card" id="ingestCard">
+                <h2 style="margin-top: 0;">1. Ingest Repository</h2>
+                <div class="input-group">
+                    <input type="text" id="repoUrl" placeholder="e.g. https://github.com/owner/repo" />
+                    <button onclick="startIngestion()">Analyze</button>
+                </div>
+                <div id="statusBadge" class="status-badge" style="display: none;"></div>
             </div>
+        </div>
 
-            <div class="output-box response-content" id="agentOutput">
-                Output from the AI will appear here...
+        <div class="tab-panel" id="panel-explore">
+            <div class="card disabled-ui" id="chatCard">
+                <h2 style="margin-top: 0;">2. Explore &amp; Ask</h2>
+                <button class="btn-success" onclick="fetchGuide()" style="margin-bottom: 2rem;">🗺️ Generate Structured
+                    Onboarding Guide</button>
+
+                <div class="input-group">
+                    <input type="text" id="queryInput" placeholder="Ask details about how files work together..." />
+                    <button onclick="askAgent()">Send</button>
+                </div>
+
+                <div class="output-box response-content" id="agentOutput">
+                    Output from the AI will appear here...
+                </div>
+
+                <button id="pdfBtn" class="btn-success" onclick="downloadPdf()" style="display: none; margin-top: 1rem;">Download Onboarding Guide as PDF</button>
             </div>
-            
-            <button id="pdfBtn" class="btn-success" onclick="downloadPdf()" style="display: none; margin-top: 1rem;">Download Onboarding Guide as PDF</button>
+        </div>
+
+        <div class="tab-panel" id="panel-review">
+            <div class="card" id="reviewCard">
+                <h2 style="margin-top: 0;">3. Review Code</h2>
+
+                <div class="input-group" style="margin-bottom: 0;">
+                    <input type="text" id="prUrl" placeholder="https://github.com/owner/repo/pull/123" />
+                    <button id="reviewPrBtn" onclick="runPRReview()">⚡ Review PR</button>
+                </div>
+                <div class="pr-divider">— or paste code directly —</div>
+
+                <select id="reviewLang">
+                    <option value="">Auto-detect</option>
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="TypeScript">TypeScript</option>
+                    <option value="Go">Go</option>
+                    <option value="Rust">Rust</option>
+                    <option value="C++">C++</option>
+                    <option value="SQL">SQL</option>
+                </select>
+
+                <textarea class="code-input" id="reviewCode" rows="14" placeholder="Paste your code here..."></textarea>
+
+                <button id="reviewBtn" onclick="runCodeReview()" style="width: 100%;">⚡ Review Code</button>
+
+                <div id="reviewLoading" style="display: none; align-items: center; gap: 0.75rem; margin-top: 1.25rem; color: #8b949e;">
+                    <div class="spinner"></div>
+                    <span>Analyzing code with AI...</span>
+                </div>
+
+                <div id="reviewResults" style="display: none; margin-top: 1.5rem;"></div>
+            </div>
         </div>
     </div>
 
     <script>
         let currentActiveRepo = "";
         let pollingTimer;
+
+        function showTab(name) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tabBtn-' + name).classList.add('active');
+            document.getElementById('panel-' + name).classList.add('active');
+        }
 
         async function startIngestion() {
             const urlInput = document.getElementById("repoUrl").value.trim();
@@ -327,7 +578,9 @@
                 badge.innerHTML = "❌ Ingestion Failed";
                 badge.style.color = "#f87171";
             } else {
-                badge.innerHTML = `<div class="spinner"></div> Ingesting files in background...`;
+                const pct = data.progress || 0;
+                const pctText = pct > 0 ? ` (${pct}%)` : '';
+                badge.innerHTML = `<div class="spinner"></div> Ingesting files in background...${pctText}`;
             }
         }
 
@@ -351,7 +604,7 @@
                 body: JSON.stringify({ repo_url: currentActiveRepo, question: query })
             });
             const data = await res.json();
-            
+
             const copyBtnHtml = `<button id="copyBtn" class="copy-btn" onclick="copyAnswer()">📋 Copy</button>`;
             output.innerHTML = copyBtnHtml + marked.parse(data.answer);
 
@@ -382,9 +635,9 @@
             const clone = output.cloneNode(true);
             const btn = clone.querySelector('.copy-btn');
             if (btn) btn.remove();
-            
+
             await navigator.clipboard.writeText(clone.innerText.trim());
-            
+
             const copyBtn = document.getElementById("copyBtn");
             copyBtn.innerHTML = "✅ Copied!";
             setTimeout(() => {
@@ -446,8 +699,7 @@
 
                     let rawText = window.lastGuideMarkdown || "";
                     let lines = rawText.split('\n');
-                    
-                    // Bug 3: Strip AI Preamble
+
                     const firstContentIndex = lines.findIndex(l => /^(#|\d+\.|Onboarding)/.test(l.trim()));
                     if (firstContentIndex !== -1) {
                         lines = lines.slice(firstContentIndex);
@@ -462,14 +714,13 @@
                             continue;
                         }
 
-                        // 3. Tables
                         if (trimmed.startsWith('|')) {
                             const tableLines = [];
                             while (i < lines.length && lines[i].trim().startsWith('|')) {
                                 tableLines.push(lines[i].trim());
                                 i++;
                             }
-                            i--; 
+                            i--;
 
                             if (tableLines.length >= 3) {
                                 y += 5;
@@ -497,17 +748,17 @@
                                 for (let r = 2; r < tableLines.length; r++) {
                                     const rowData = tableLines[r].split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length - 1).map(s => s.trim());
                                     const isCategory = rowData.length === 1 || (rowData.length === 3 && !rowData[1] && !rowData[2]);
-                                    
+
                                     const cellLines = rowData.map((val, idx) => {
                                         const cleanVal = val.replace(/\*\*/g, '').replace(/`/g, '');
                                         return pdf.splitTextToSize(cleanVal, colWidths[idx] - 4);
                                     });
-                                    
+
                                     const maxLines = isCategory ? 1 : Math.max(...cellLines.map(l => l.length));
                                     const rowHeight = (maxLines * 4.5) + 3;
 
                                     checkPageBreak(rowHeight);
-                                    
+
                                     if (isCategory) {
                                         pdf.setFillColor(232, 240, 254);
                                         pdf.rect(tableX, y, tableWidth, rowHeight, 'F');
@@ -541,12 +792,11 @@
                             }
                         }
 
-                        // Bug 1 & 2: Content Styling and Global Wrapping
                         let cleanLine = line.replace(/#+\s*/, "").replace(/\*\*/g, "").replace(/`/g, "");
-                        
+
                         let fontSize = 10;
                         let fontStyle = "normal";
-                        let textColor = [68, 68, 68]; // Gray #444444
+                        let textColor = [68, 68, 68];
                         let xOffset = margin;
                         let lineSpacing = 6;
                         let isBullet = false;
@@ -554,11 +804,11 @@
                         if (/^\d+\.\s+[A-Z]/.test(trimmed)) {
                             fontSize = 12;
                             fontStyle = "bold";
-                            textColor = [26, 26, 26]; // #1a1a1a
+                            textColor = [26, 26, 26];
                         } else if (/^Step \d+/.test(trimmed)) {
                             fontSize = 11;
                             fontStyle = "bold";
-                            textColor = [51, 51, 51]; // #333333
+                            textColor = [51, 51, 51];
                         } else if (/^[\*•-]\s+/.test(trimmed)) {
                             xOffset = margin + 8;
                             cleanLine = cleanLine.replace(/^[\*•-]\s+/, "");
@@ -593,6 +843,177 @@
                     pdfBtn.disabled = false;
                 }
             }, 50);
+        }
+
+        /* ── Review Code ── */
+
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function scoreColor(score) {
+            if (score >= 70) return '#2ea043';
+            if (score >= 40) return '#d97706';
+            return '#dc2626';
+        }
+
+        function gradeColor(grade) {
+            if (grade === 'A' || grade === 'B') return '#2ea043';
+            if (grade === 'C') return '#fbbf24';
+            return '#f87171';
+        }
+
+        function renderReviewResult(data) {
+            const sc = data.overall_score != null ? data.overall_score : 0;
+            const grade = data.grade || 'F';
+
+            let html = `
+                <div class="score-hero">
+                    <div>
+                        <span style="font-size:4rem;font-weight:700;color:${scoreColor(sc)};line-height:1;">${sc}</span>
+                        <span style="font-size:2rem;color:#8b949e;margin:0 0.25rem;">/</span>
+                        <span style="font-size:3rem;font-weight:700;color:${gradeColor(grade)};line-height:1;">${esc(grade)}</span>
+                    </div>
+                    <div style="margin-top:0.75rem;color:#8b949e;font-size:0.95rem;line-height:1.6;">${esc(data.summary || '')}</div>
+                    <div style="margin-top:0.4rem;font-size:0.8rem;color:#8b949e;">Language: ${esc(data.language || 'unknown')}</div>
+                </div>`;
+
+            if (data.categories) {
+                html += `<div class="review-section-title">Category Scores</div>`;
+                for (const cat of Object.values(data.categories)) {
+                    const s = cat.score != null ? cat.score : 0;
+                    const c = scoreColor(s);
+                    html += `
+                        <div class="category-row">
+                            <div class="category-label-row">
+                                <span>${esc(cat.label)}</span>
+                                <span style="color:${c};font-weight:600;">${s}<span style="color:#8b949e;font-weight:400;">/100</span></span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width:${s}%;background:${c};"></div>
+                            </div>
+                        </div>`;
+                }
+            }
+
+            const issues = data.issues || [];
+            const groups = [
+                { key: 'CRITICAL',   cls: 'critical',   label: '🔴 Critical Issues', color: '#f87171' },
+                { key: 'WARNING',    cls: 'warning',    label: '🟡 Warnings',         color: '#fbbf24' },
+                { key: 'SUGGESTION', cls: 'suggestion', label: '💡 Suggestions',      color: '#58a6ff' },
+            ];
+            for (const g of groups) {
+                const items = issues.filter(i => i.severity === g.key);
+                if (!items.length) continue;
+                html += `<div class="review-section-title" style="color:${g.color};">${g.label} (${items.length})</div>`;
+                for (const issue of items) {
+                    html += `
+                        <div class="issue-card ${g.cls}">
+                            <div>
+                                <span class="severity-badge ${g.cls}">${esc(issue.severity)}</span>
+                                <span style="font-weight:600;font-size:0.95rem;">${esc(issue.title || '')}</span>
+                            </div>
+                            <p class="issue-description">${esc(issue.description || '')}</p>
+                            ${issue.fix ? `<div class="issue-fix">💡 ${esc(issue.fix)}</div>` : ''}
+                        </div>`;
+                }
+            }
+
+            const positives = data.positives || [];
+            if (positives.length) {
+                html += `<div class="review-section-title">✅ Positives</div>
+                    <div style="background:#0d1117;border-radius:10px;padding:0.5rem 1.25rem;border:1px solid var(--border-color);">`;
+                for (const p of positives) {
+                    html += `<div class="positive-item">${esc(p)}</div>`;
+                }
+                html += `</div>`;
+            }
+
+            return html;
+        }
+
+        async function runPRReview() {
+            const prUrl = document.getElementById('prUrl').value.trim();
+            if (!prUrl) {
+                return runCodeReview();
+            }
+
+            const btn = document.getElementById('reviewPrBtn');
+            const reviewBtn = document.getElementById('reviewBtn');
+            const loading = document.getElementById('reviewLoading');
+            const results = document.getElementById('reviewResults');
+
+            btn.disabled = true;
+            reviewBtn.disabled = true;
+            loading.style.display = 'flex';
+            results.style.display = 'none';
+
+            try {
+                const res = await fetch('/review-pr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pr_url: prUrl })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    results.innerHTML = `<div style="color:#f87171;padding:1rem;background:#0d1117;border-radius:10px;border:1px solid #f87171;">
+                        ${esc(data.detail || 'An error occurred.')}
+                    </div>`;
+                } else {
+                    results.innerHTML = renderReviewResult(data);
+                }
+            } catch (err) {
+                results.innerHTML = `<div style="color:#f87171;padding:1rem;background:#0d1117;border-radius:10px;border:1px solid #f87171;">
+                    Failed to connect to server: ${esc(err.message)}
+                </div>`;
+            } finally {
+                btn.disabled = false;
+                reviewBtn.disabled = false;
+                loading.style.display = 'none';
+                results.style.display = 'block';
+            }
+        }
+
+        async function runCodeReview() {
+            const code = document.getElementById('reviewCode').value;
+            const language = document.getElementById('reviewLang').value;
+            const btn = document.getElementById('reviewBtn');
+            const loading = document.getElementById('reviewLoading');
+            const results = document.getElementById('reviewResults');
+
+            btn.disabled = true;
+            loading.style.display = 'flex';
+            results.style.display = 'none';
+
+            try {
+                const res = await fetch('/review', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, language })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    results.innerHTML = `<div style="color:#f87171;padding:1rem;background:#0d1117;border-radius:10px;border:1px solid #f87171;">
+                        ${esc(data.detail || 'An error occurred.')}
+                    </div>`;
+                } else {
+                    results.innerHTML = renderReviewResult(data);
+                }
+            } catch (err) {
+                results.innerHTML = `<div style="color:#f87171;padding:1rem;background:#0d1117;border-radius:10px;border:1px solid #f87171;">
+                    Failed to connect to server: ${esc(err.message)}
+                </div>`;
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+                results.style.display = 'block';
+            }
         }
 
     </script>
