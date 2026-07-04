@@ -131,6 +131,7 @@ uvicorn main:app --reload --port 8000
 ## Live Demo
 
 **Live:** https://codecompass-237057729662.us-central1.run.app
+
 **Demo Video:** https://drive.google.com/file/d/1fhkOI4EXVuNIu4cXmv588LaxOW84s2ba/view?usp=sharing
 
 ---
